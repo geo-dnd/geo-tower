@@ -7,7 +7,11 @@
     "minimum": "14",
     "verified": "14.367"
   },
-  "esmodules": ["scripts/main.js"],
+  "manifest": "https://github.com/geo-dnd/geo-tower/releases/download/v0.1.0/module.json",
+  "download": "https://github.com/geo-dnd/geo-tower/releases/download/v0.1.0/geo-tower.zip",
+  "esmodules": [
+    "scripts/main.js"
+  ],
   "relationships": {
     "requires": [
       {
@@ -31,7 +35,7 @@
       "type": "Item",
       "system": "dnd5e"
     },
-        {
+    {
       "name": "macros",
       "label": "Geo Tower Macros",
       "path": "packs/macros",
