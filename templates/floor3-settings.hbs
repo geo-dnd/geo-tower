@@ -1,0 +1,26 @@
+<div style="padding: 10px;">
+  <div class="form-group" style="margin-bottom: 10px;">
+    <label>Количество безопасных клеток:</label>
+    <div class="form-fields">
+      <input type="number" name="zonesCount" value="{{zonesCount}}" min="1" max="10" style="width: 100%;">
+    </div>
+  </div>
+  <div class="form-group" style="margin-bottom: 10px;">
+    <label>Формула урона:</label>
+    <div class="form-fields">
+      <input type="text" name="damageFormula" value="{{damageFormula}}" style="width: 100%;">
+    </div>
+  </div>
+  <div class="form-group" style="margin-bottom: 15px;">
+    <label>Тип урона:</label>
+    <div class="form-fields">
+      <select name="damageType" style="width: 100%;">
+        <option value="random" {{#if isRandom}}selected{{/if}}>Случайный</option>
+        {{#each damageTypes}}
+          <option value="{{this.value}}" {{#if this.selected}}selected{{/if}}>{{this.label}}</option>
+        {{/each}}
+      </select>
+    </div>
+  </div>
+  <button type="submit" style="width: 100%;"><i class="fas fa-save"></i> Сохранить</button>
+</div>

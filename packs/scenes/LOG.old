@@ -1,0 +1,5 @@
+2026/11/08-16:19:33.298 43ac Recovering log #131
+2026/11/08-16:19:33.300 43ac Level-0 table #133: started
+2026/11/08-16:19:33.304 43ac Level-0 table #133: 98013 bytes OK
+2026/11/08-16:19:33.307 43ac Delete type=0 #131
+2026/11/08-16:19:33.307 43ac Delete type=3 #130

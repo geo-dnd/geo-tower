@@ -1,0 +1,21 @@
+<div style="padding: 10px;">
+  <div class="form-group" style="margin-bottom: 10px;">
+    <label>Урон чумы (зараженному):</label>
+    <div class="form-fields">
+      <input type="text" name="plagueDamage" value="{{plagueDamage}}" style="width: 100%;" placeholder="1d6">
+    </div>
+  </div>
+  <div class="form-group" style="margin-bottom: 10px;">
+    <label>Урон по площади (окружающим):</label>
+    <div class="form-fields">
+      <input type="text" name="aoeDamage" value="{{aoeDamage}}" style="width: 100%;" placeholder="1d4">
+    </div>
+  </div>
+  <div class="form-group" style="margin-bottom: 15px;">
+    <label>Радиус заражения (футы):</label>
+    <div class="form-fields">
+      <input type="number" name="plagueRadius" value="{{plagueRadius}}" style="width: 100%;" min="5" step="5">
+    </div>
+  </div>
+  <button type="submit" style="width: 100%;"><i class="fas fa-save"></i> Сохранить</button>
+</div>

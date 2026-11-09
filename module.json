@@ -1,0 +1,48 @@
+{
+  "id": "geo-tower",
+  "title": "Geo Tower",
+  "version": "0.1.0",
+  "socket": true,
+  "compatibility": {
+    "minimum": "14",
+    "verified": "14.367"
+  },
+  "esmodules": ["scripts/main.js"],
+  "relationships": {
+    "requires": [
+      {
+        "id": "socketlib",
+        "type": "module",
+        "reason": "Необходим для выполнения привилегированных операций от имени ГМ"
+      }
+    ]
+  },
+  "packs": [
+    {
+      "name": "scenes",
+      "label": "Geo Tower Scenes",
+      "path": "packs/scenes",
+      "type": "Scene"
+    },
+    {
+      "name": "items",
+      "label": "Geo Tower Items",
+      "path": "packs/items",
+      "type": "Item",
+      "system": "dnd5e"
+    },
+        {
+      "name": "macros",
+      "label": "Geo Tower Macros",
+      "path": "packs/macros",
+      "type": "Macro"
+    },
+    {
+      "name": "actors",
+      "label": "Geo Tower Actors",
+      "path": "packs/actors",
+      "type": "Actor",
+      "system": "dnd5e"
+    }
+  ]
+}
