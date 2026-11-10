@@ -9,7 +9,7 @@ import {
   alphaTextureCache,
   loadAlphaTexture,
   preloadTileTextures
-} from "./utils.js"; // ✅ Исправлен путь с "../" на "./"
+} from "./utils.js";
 
 const MODULE_ID = "geo-tower";
 export const FLOOR_1_SCENE_NAME = "Geo Tower - Этаж 1";
@@ -20,6 +20,9 @@ const ALPHA_THRESHOLD = 32;
 
 let pointerHandler = null;
 let canvasElement = null;
+
+// ✅ Локальный замок для предотвращения двойных кликов
+const pendingPickups = new Set();
 
 export async function attachFloor1() {
   if (pointerHandler) return;
@@ -43,13 +46,13 @@ export function detachFloor1() {
   }
   pointerHandler = null;
   canvasElement = null;
+  pendingPickups.clear();
 }
 
 async function onPointerDown(event) {
   try {
     if ((event.button ?? 0) !== 0) return;
     
-    // ✅ Получаем сокет динамически
     const socket = socketlib.modules.get(MODULE_ID);
     if (!socket) return;
 
@@ -71,15 +74,10 @@ async function onPointerDown(event) {
 
     if (!point || Number.isNaN(point.x) || Number.isNaN(point.y)) return;
 
-    console.log("Geo Tower | click point:", { x: Math.round(point.x), y: Math.round(point.y) });
-
-    if (isPointerOnAnyToken(point)) {
-      console.log("Geo Tower | клик попал в токен — игнорируется");
-      return;
-    }
+    if (isPointerOnAnyToken(point)) return;
 
     const tilePlaceable = hitTestTile(point);
-    if (!tilePlaceable) return console.log("Geo Tower | no interactive tile under click");
+    if (!tilePlaceable) return;
 
     const tileDoc = tilePlaceable.document;
     const name = tileDoc.name ?? "";
@@ -87,10 +85,8 @@ async function onPointerDown(event) {
     const brokenMatch = name.match(/^glass-broken-(\d+)$/);
     if (!smallMatch && !brokenMatch) return;
 
-    console.log("Geo Tower | hit tile:", name);
-
     const tokenPlaceable = getActingToken();
-    if (!tokenPlaceable) return console.warn("Geo Tower | НЕТ ВЫДЕЛЕННОГО ТОКЕНА");
+    if (!tokenPlaceable) return;
     
     const actor = tokenPlaceable.actor;
     if (!actor) return;
@@ -98,17 +94,24 @@ async function onPointerDown(event) {
 
     const tokenCenter = tokenPlaceable.center;
     const distance = distanceFromPointToTileEdgeFt(tokenCenter, tileDoc);
-    if (distance > INTERACT_RANGE_FT) {
-      console.log(`Geo Tower | слишком далеко (нужно ≤ ${INTERACT_RANGE_FT})`);
-      return;
-    }
+    if (distance > INTERACT_RANGE_FT) return;
 
     const sceneId = canvas.scene.id;
 
     if (smallMatch) {
       const shardIndex = Number(smallMatch[1]);
+      
+      // ✅ Проверяем, не идет ли уже процесс подбора этого тайла
+      if (pendingPickups.has(tileDoc.id)) return;
+      
+      // ✅ Ставим замок
+      pendingPickups.add(tileDoc.id);
+      
       await socket.executeAsGM("pickupShard", { sceneId, tileId: tileDoc.id, actorId: actor.id, shardIndex });
-      ui.notifications.info(`Вы подобрали Осколок ${shardIndex}.`);
+      
+      // ✅ Снимаем замок через 1 секунду (чтобы дать время на синхронизацию)
+      setTimeout(() => pendingPickups.delete(tileDoc.id), 1000);
+      
       return;
     }
 
